@@ -1,3 +1,10 @@
+android.api = 35
+android.minapi = 24
+android.ndk = 27.3.13750724
+android.sdk_path = /usr/local/lib/android/sdk
+android.ndk_path = /usr/local/lib/android/sdk/ndk/27.3.13750724
+android.skip_update = True
+android.accept_sdk_license = True
 name: Build Android APK
 
 on:
@@ -25,7 +32,7 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      - name: Install dependencies
+      - name: Install Linux dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -33,9 +40,15 @@ jobs:
             autoconf automake libtool \
             pkg-config zlib1g-dev \
             libncurses5-dev libncursesw5-dev \
-            libtinfo6 \
-            cmake libffi-dev libssl-dev \
+            libtinfo6 cmake libffi-dev libssl-dev \
             libltdl-dev
+
+      - name: Check Android SDK
+        run: |
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_NDK=$ANDROID_NDK"
+          "$ANDROID_HOME/platform-tools/adb" version || true
+          "$ANDROID_HOME/build-tools/37.0.0/aapt" version
 
       - name: Install Buildozer
         run: |
@@ -51,5 +64,3 @@ jobs:
         with:
           name: aimtrainer-apk
           path: bin/*.apk
-
-          
