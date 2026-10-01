@@ -51,4 +51,5 @@ jobs:
         with:
           name: aimtrainer-apk
           path: bin/*.apk
+
           
